@@ -58,6 +58,7 @@ services:
 
   db:
     image: postgres:9.4
+    restart: always
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"

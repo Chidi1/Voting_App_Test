@@ -40,6 +40,7 @@ services:
 
   db:
     image: postgres:9.4
+    restart: always
     container_name: db
     environment:
       POSTGRES_USER: "postgres"
