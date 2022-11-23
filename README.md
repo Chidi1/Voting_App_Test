@@ -1,4 +1,4 @@
-Example Voting App
+Simple Voting App
 =========
 
 A simple multi-tier voting application running on a Linux VM (Ubuntu) managed by Vagrant.  
