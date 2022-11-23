@@ -5,6 +5,7 @@
 services:
   vote:
     build: ./vote
+    scale: 3
     # use python rather than gunicorn for local dev
     command: python app.py
     depends_on:
@@ -20,6 +21,7 @@ services:
 
   result:
     build: ./result
+    scale: 2
     # use nodemon rather than node for local dev
     command: nodemon server.js
     depends_on:
@@ -37,6 +39,7 @@ services:
   worker:
     build:
       context: ./worker
+    scale: 3
     depends_on:
       redis:
         condition: service_healthy 
@@ -60,8 +63,8 @@ services:
     image: postgres:9.4
     restart: always
     environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
     volumes:
       - "db-data:/var/lib/postgresql/data"
       - "./healthchecks:/healthchecks"
