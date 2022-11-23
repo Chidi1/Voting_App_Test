@@ -165,5 +165,6 @@ It's an automation engine that automates cloud provisioning, configuration manag
 
 **Templates:** Templates files are based on Python’s Jinja2 template engine and have a .j2 extension. Contents of index.html file are placed into a template file (optional).  
 
-**Variables:** Used to add custom-made variables in your playbooks.  
+**Variables:** Used to add custom-made variables in your playbooks.   
+
 
