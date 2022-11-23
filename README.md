@@ -4,7 +4,7 @@ Example Voting App
 A simple multi-tier voting application running on a Linux VM (Ubuntu) managed by Vagrant.  
 
 Tools used
---------------- <br>  
+--------------- 
 
 | Category | Tools |  
 | :----: | :----: |  
@@ -24,70 +24,70 @@ Getting started
 
 ## Create and start an Ubuntu Linux VM with Vagrant  
 
-*Open your terminal (e.g. a Mac Terminal or Windows Command Prompt). Create a new directory and cd into it:    
+**Open your terminal (e.g. a Mac Terminal or Windows Command Prompt). Create a new directory and cd into it:**    
 ```
 makdir banque_test
 cd banque_test
 ```  
-*Use the vagrant init command to initialise a new vagrant machine.  
+**Use the vagrant init command to initialise a new vagrant machine.** 
 ```
 vagrant init ubuntu/jammy64  
 ```
-*Boot up the virtual machine with:  
+**Boot up the virtual machine with:**  
 ```
 vagrant up
 ```
-*Go inside the VM with this command:
+**Go inside the VM with this command:**
 ```
 vagrant up  
 ```  
 
 ## Install the web server (Apache)  
 
-*Install Apache using the following commands:
+**Install Apache using the following commands:**
 ```
 sudo apt update 
 sudo apt install apache2  
 ```  
-*Check if Apache is running
+**Check if Apache is running**
 ```  
 systemctl status apache2  
 ```  
 
 ## Setup network to isolate the traffic of the client-facing applications from the backend applications  
 
-*Find the file banque_test/Vagrantfile:  
+**Find the file banque_test/Vagrantfile:**  
 ```
 cd banque_test
 sudo vim Vagrantfile
 ```
-*Add this line to set the network configuration to static IP and save:  
+**Add this line to set the network configuration to static IP and save:**  
 ```
 config.vm.network "private_network", ip: "192.168.33.10"  
 ```  
 
-*Reload and SSH into VM:
+**Reload and SSH into VM:**
 ```
 vagrant reload
 vagrant ssh
 ```  
 
-*Install dependencies:
+**Install dependencies:**
 ```
 sudo apt install docker.io
 ```  
-*Add current user to docker group:
+**Add current user to docker group:**
 ```  
 sudo usermod -aG docker $(whoami)
 ```  
-*Start docker:
+**Start docker:**
 ```  
 systemctl start docker
 ```  
 
 ## Cd into the default Ubuntu document root (/var/www/html) and add application files
 
-*Run the following commands to add files and spin up the app:
+**Run the following commands to add files and spin up the app:**
 ```  
 cd /var/www/html
 git clone https://github.com/Chidi1/example-voting-app.git
@@ -97,7 +97,7 @@ docker-compose up -d
 
 ## Test the application  
 
-*Visit the following URLs:
+**Visit the following URLs:**
 ```  
 The app will be running at http://192.168.33.10:5000/ 
 The results will be at http://192.168.33.10:5001/ 
