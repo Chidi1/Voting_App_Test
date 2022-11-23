@@ -1,82 +1,107 @@
 Example Voting App
 =========
 
-A simple distributed application running across multiple Docker containers.
+A simple multi-tier voting application running on a Linux VM (Ubuntu) managed by Vagrant.  
+
+Tools used
+--------------- <br>  
+
+| Category | Tools |  
+| :----: | :----: |  
+| Virtulization | VirtualBos |  
+| Automation | Vagrant |  
+| Operating System | Linux (Ubuntu 20.04) |  
+| Web Server | Apache HTTP Server |  
+| Ochestrator | Docker-compose |  
+
 
 Getting started
----------------
+---------------  
 
-Download [Docker Desktop](https://www.docker.com/products/docker-desktop) for Mac or Windows. [Docker Compose](https://docs.docker.com/compose) will be automatically installed. On Linux, make sure you have the latest version of [Compose](https://docs.docker.com/compose/install/). 
+## Downloads:
+![Install VirtualBox](https://www.virtualbox.org/)
+![Install Vagrant](https://www.vagrantup.com/)  
 
+## Create and start an Ubuntu Linux VM with Vagrant  
 
-## Linux Containers
-
-The Linux stack uses Python, Node.js, .NET Core (or optionally Java), with Redis for messaging and Postgres for storage.
-
-> If you're using [Docker Desktop on Windows](https://store.docker.com/editions/community/docker-ce-desktop-windows), you can run the Linux version by [switching to Linux containers](https://docs.docker.com/docker-for-windows/#switch-between-windows-and-linux-containers), or run the Windows containers version.
-
-Run in this directory:
+*Open your terminal (e.g. a Mac Terminal or Windows Command Prompt). Create a new directory and cd into it:    
 ```
-docker-compose up
+makdir banque_test
+cd banque_test
+```  
+*Use the vagrant init command to initialise a new vagrant machine.  
 ```
-The app will be running at [http://localhost:5000](http://localhost:5000), and the results will be at [http://localhost:5001](http://localhost:5001).
-
-Alternately, if you want to run it on a [Docker Swarm](https://docs.docker.com/engine/swarm/), first make sure you have a swarm. If you don't, run:
+vagrant init ubuntu/jammy64  
 ```
-docker swarm init
+*Boot up the virtual machine with:  
 ```
-Once you have your swarm, in this directory run:
+vagrant up
 ```
-docker stack deploy --compose-file docker-stack.yml vote
+*Go inside the VM with this command:
 ```
+vagrant up  
+```  
 
-## Windows Containers
+## Install the web server (Apache)  
 
-An alternative version of the app uses Windows containers based on Nano Server. This stack runs on .NET Core, using [NATS](https://nats.io) for messaging and [TiDB](https://github.com/pingcap/tidb) for storage.
-
-You can build from source using:
-
+*Install Apache using the following commands:
 ```
-docker-compose -f docker-compose-windows.yml build
+sudo apt update 
+sudo apt install apache2  
+```  
+*Check if Apache is running
+```  
+systemctl status apache2  
+```  
+
+## Setup network to isolate the traffic of the client-facing applications from the backend applications  
+
+*Find the file banque_test/Vagrantfile:  
 ```
-
-Then run the app using:
-
+cd banque_test
+sudo vim Vagrantfile
 ```
-docker-compose -f docker-compose-windows.yml up -d
+*Add this line to set the network configuration to static IP and save:  
 ```
+config.vm.network "private_network", ip: "192.168.33.10"  
+```  
 
-> Or in a Windows swarm, run `docker stack deploy -c docker-stack-windows.yml vote`
-
-The app will be running at [http://localhost:5000](http://localhost:5000), and the results will be at [http://localhost:5001](http://localhost:5001).
-
-
-Run the app in Kubernetes
--------------------------
-
-The folder k8s-specifications contains the yaml specifications of the Voting App's services.
-
-First create the vote namespace
-
+*Reload and SSH into VM:
 ```
-$ kubectl create namespace vote
-```
+vagrant reload
+vagrant ssh
+```  
 
-Run the following command to create the deployments and services objects:
+*Install dependencies:
 ```
-$ kubectl create -f k8s-specifications/
-deployment "db" created
-service "db" created
-deployment "redis" created
-service "redis" created
-deployment "result" created
-service "result" created
-deployment "vote" created
-service "vote" created
-deployment "worker" created
-```
+sudo apt install docker.io
+```  
+*Add current user to docker group:
+```  
+sudo usermod -aG docker $(whoami)
+```  
+*Start docker:
+```  
+systemctl start docker
+```  
 
-The vote interface is then available on port 31000 on each host of the cluster, the result one is available on port 31001.
+## Cd into the default Ubuntu document root (/var/www/html) and add application files
+
+*Run the following commands to add files and spin up the app:
+```  
+cd /var/www/html
+git clone https://github.com/Chidi1/example-voting-app.git
+cd example-voting-app
+docker-compose up -d
+```  
+
+## Test the application  
+
+*Visit the following URLs:
+```  
+The app will be running at http://192.168.33.10:5000/ 
+The results will be at http://192.168.33.10:5001/ 
+```  
 
 Architecture
 -----
