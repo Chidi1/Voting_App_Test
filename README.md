@@ -103,6 +103,24 @@ The app will be running at http://192.168.33.10:5000/
 The results will be at http://192.168.33.10:5001/ 
 ```  
 
+## Automate VM and application deployment (To automatically install Apache HTTP Server whenever the virtual machine is created): 
+
+**Locate Vagrantfile**
+```
+cd /vagrant
+sudo vim Vagrantfile
+```  
+**Edit Vagrantfile and add the following command:**  
+```  
+config.vm.provision "shell", inline: <<-END
+apt update
+apt install -y apache2
+echo "Machine provisioned at $(date)! Welcome!"
+END
+``` 
+
+
+
 Architecture
 -----
 
@@ -115,11 +133,37 @@ Architecture
 * A [Node.js](/result) or [ASP.NET Core SignalR](/result/dotnet) webapp which shows the results of the voting in real time
 
 
-Notes
+## Additional Tips
 -----
 
-The voting application only accepts one vote per client. It does not register votes if a vote has already been submitted from a client.
+**Infrastructure automation using Ansible:**  
 
-This isn't an example of a properly architected perfectly designed distributed app... it's just a simple 
-example of the various types of pieces and languages you might see (queues, persistent data, etc), and how to 
-deal with them in Docker at a basic level. 
+Infrastructure automation using Ansible makes it easy to create, execute, and manage automation of infrastructure.  
+It's an automation engine that automates cloud provisioning, configuration management, application deployment and intra-service orchestration.  
+
+## Ansible concept:  
+
+**Ansible tasks:** actions that Ansible will execute.  
+
+**Ansible inventory:** The “inventory” is a configuration file where you define the host information. It's a list of hosts where Ansible will execute tasks.  
+
+**Ansible play:** a mapping between groups of hosts in the inventory and tasks to perform.  
+
+**Ansible playbook:** a file with all the plays that Ansible will execute over the inventory. It’s the definition of the state you want the system to have.  
+
+## Ansible components  
+
+**Playbooks:** A playbook is where you define how to apply policies, declare configurations, orchestrate steps and launch tasks either synchronously or asynchronously on your servers.  
+
+**Plays:** Playbooks contain plays. Plays are essentially groups of tasks that are performed on defined hosts to enforce your defined functions.  
+
+**Tasks:** Tasks are actions carried out by playbooks.  
+
+**Roles:** A role is the Ansible way of bundling automation content and making it reusable. Roles are organizational components that can be assigned to a set of hosts to organize tasks.  
+
+**Handlers:** Handlers are similar to tasks except that a handler will be executed only when it is called by an event.  
+
+**Templates:** Templates files are based on Python’s Jinja2 template engine and have a .j2 extension. Contents of index.html file are placed into a template file (optional).  
+
+**Variables:** Used to add custom-made variables in your playbooks.  
+
