@@ -75,6 +75,7 @@ vagrant ssh
 **Install dependencies:**
 ```
 sudo apt install docker.io
+sudo apt install docker-compose
 ```  
 **Add current user to docker group:**
 ```  
