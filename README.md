@@ -39,7 +39,7 @@ vagrant up
 ```
 **Go inside the VM with this command:**
 ```
-vagrant up  
+vagrant ssh  
 ```  
 
 ## Install the web server (Apache)  
